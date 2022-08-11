@@ -106,23 +106,14 @@ router.post('/players', function (req, res) {
 
     let arrE = req.body.element
 
-    let vaibhav=players.array.forEach(x => {
-        if(arrE.name==x.name){
-            return res.send("player is not exists");
+    for (let i = 0; i < players.length; i++) {
+        let guru = players[i]
+        if (guru.name === arrE.name) {
+            return res.send("player is already exists")
         }
-        players.push(arrE)
+    }
+    players.push(arrE)
     return res.send({ data: players, status: true })
-        
-    });
-
-    // for (let i = 0; i < players.length; i++) {
-    //     let guru = players[i]
-    //     if (guru.name === arrE.name) {
-    //         return res.send("player is already exists")
-    //     }
-    // }
-    // players.push(arrE)
-    // return res.send({ data: players, status: true })
 })
 
 module.exports = router;
