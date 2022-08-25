@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
 const { default: mongoose } = require('mongoose');
 const app = express();
+const moment=require('moment');
+const time=moment();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +22,14 @@ mongoose.connect("mongodb+srv://functionup-cohort:G0Loxqc9wFEGyEeJ@cluster0.rzot
 //         next();
 //   }
 //   );
+app.use(
+    function (req, res, next) {
+        
+    console.log('middleware is working')
+    console.log(time.format('YYYY-MM-DD hh:mm:ss'), req.ip, req.originalUrl)
+    next();
+    }
+);
   
 
 app.use('/', route);

@@ -3,7 +3,8 @@ const router = express.Router();
 // const UserModel= require("../models/userModel.js")
 const UserController= require("../controllers/userController")
 const BookController= require("../controllers/bookController")
-const commonMW = require ("../middlewares/commonMiddlewares")
+const commonMW = require ("../middlewares/commonMiddlewares");
+const { application } = require('express');
 
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
@@ -41,10 +42,11 @@ const mid1= function ( req, res, next) {
 */
 
 // e.g. restricted and open-to-all API's can be handled like below now:
-router.get('/homePage', mid1, UserController.commonHandler)
+router.get('/homePage',commonMW.mid4,)
 router.get('/profileDetails', mid1, UserController.commonHandler)
 router.get('/friendList', mid1, UserController.commonHandler)
 router.get('/changePassword', mid1, UserController.commonHandler)
+
 
 router.get('/termsAndConditions',  UserController.commonHandler)
 router.get('/register',  UserController.commonHandler, function(req, res){
