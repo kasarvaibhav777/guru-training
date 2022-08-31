@@ -4,7 +4,7 @@ const userModel = require("../models/userModel");
 
 
 
-
+//check authentication condition
 const authorise = function(req, res, next) {
     let token = req.headers["x-Auth-token"]||req.headers["x-auth-token"];  //case sensitive
     //   if (!token) token = req.headers["x-auth-token"];
@@ -22,9 +22,10 @@ const authorise = function(req, res, next) {
         return res.send({msg:error.message})
       }
 
-      
+      //Check Authorisation condition
       try{
         let decoded =  jwt.verify(token,'functionup-thorium')
+        console.log(decoded);
         let userToModify = req.params.userId
         let userLoggedIn= decoded.userId
         if(userToModify!=userLoggedIn){
