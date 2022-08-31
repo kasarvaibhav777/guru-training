@@ -5,38 +5,31 @@ const userModel = require("../models/userModel");
 
 
 //check authentication condition
-const authorise = function(req, res, next) {
-    let token = req.headers["x-Auth-token"]||req.headers["x-auth-token"];  //case sensitive
-    //   if (!token) token = req.headers["x-auth-token"];
-    
-      //If no token is present in the request header return error. This means the user is not logged in.
-      if (!token) return res.send({ status: false, msg: "token must be present" });
-    
-      //try & catch is used for error handling
-      try{
-        let decoded = jwt.verify(token,'functionup-thorium')
-      }
-    
-    catch(error){
-     //console.log(error)
-        return res.send({msg:error.message})
-      }
+const authorise = function (req, res, next) {
+  try {
+    //______________________________check token present or not________________________________________
 
-      //Check Authorisation condition
-      try{
-        let decoded =  jwt.verify(token,'functionup-thorium')
-        console.log(decoded);
-        let userToModify = req.params.userId
-        let userLoggedIn= decoded.userId
-        if(userToModify!=userLoggedIn){
-          return res.send({msg: " UnAuthorized User !"})
-        }else{userId}
-      }
-    
-    
-      catch (error){}
-    
-      next()
+    let token = req.headers["x-auth-token"];
+    if (!token) return res.status(401).send({ status: false, msg: "token must be present" });
+
+    //_______________________if token present then verify valid or not__________________________ 
+
+    let decoded = jwt.verify(token, 'functionup-thorium')
+
+    //___________________________||check if user is Authorised or not||____________________________________
+
+    let userToModify = req.params.userId
+    let userLoggedIn = decoded.userId
+    if (userToModify != userLoggedIn) {
+      return res.status(403).send({ msg: " UnAuthorized User !" })
     }
+    next()   //_______________if authorised then call to the next function whcih is in userController file...
+  }
 
-module.exports.authorise=authorise
+  catch (error) {
+    return res.status(500).send({ msg: error.message })
+  }
+
+}
+
+module.exports.authorise = authorise
